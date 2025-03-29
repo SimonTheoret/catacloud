@@ -26,6 +26,7 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
+              just
               # go 1.xx (specified by overlay)
               go
 
