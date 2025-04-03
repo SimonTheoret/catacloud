@@ -1,0 +1,49 @@
+# TOML Configuration File Example
+
+# Credentials Section
+[credentials]
+# do not put your credentials in plain text here, use enviromnent variables or a vault
+username = "your_username" 
+password = "your_password"
+api_key = "your_api_key"
+
+# Cloud Configuration Section
+[cloud]
+name = "YourCloudProvider"
+endpoint = "https://cloud.provider.com"
+region = "us-west-1"
+
+# Local Folders Section
+[local_folders]
+# sync_folders   : folders to be sync with the cloud
+# backup_folders : folders that served as local backup or snapshot (?) 
+# temp_folder    : folder where temporary files are stored while syncronization happpen 
+
+sync_folders = ["/path/to/sync/folder1", "/path/to/sync/folder2", ...] 
+backup_folders = ["/path/to/backup/folder1", "/path/to/backup/folder2", ...]
+temp_folder = "/path/to/temp/folder"
+
+# Synchronization Section
+[synchronization]
+schedule = "daily"      # Options: 5min, 15min, 30min, hourly, daily, weekly, monthly
+method = "incremental"  # Options: incremental, differential, full
+snapshot_interval = "weekly"  # Options: none, hourly, daily, weekly, monthly
+
+# Logs and Errors Section
+[logs]
+# https://pkg.go.dev/log/slog#Debug
+log_file = "/path/to/log/file.log"
+error_file = "/path/to/error/file.log"
+
+# Encryption Section
+[encryption]
+algorithm = "AES-256"
+key_file = "/path/to/encryption/key.pem"
+
+# Routines or Automations Section
+[automations]
+cleanup_temp_files = true
+cleanup_schedule = "weekly"  # Options: hourly, daily, weekly, monthly
+notify_on_failure = true
+notification_email = "email@example.com" # should not be in plain text here
+
