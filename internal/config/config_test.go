@@ -2,14 +2,13 @@ package config
 
 import (
 	"os"
-	"testing"
 	"path/filepath"
+	"testing"
 )
 
 func TestNewConfig(t *testing.T) {
 	// Create a temporary directory for the config file
 	tempDir := t.TempDir()
-
 
 	// Test case 1: Config file exists
 	configContent := []byte(`
@@ -27,11 +26,11 @@ func TestNewConfig(t *testing.T) {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
 
-	// Check Get 
+	// Check Get
 	if cfg.Get("key") != "value" {
 		t.Errorf("Expected config value 'value', got %v", cfg.Get("key"))
 	}
-	
+
 	// Check Set
 	cfg.Set("new_key", "new_value")
 	if cfg.Get("new_key") != "new_value" {
@@ -48,8 +47,6 @@ func TestNewConfig(t *testing.T) {
 		t.Errorf("Expected error for non-existent config file, got nil")
 	}
 }
-
-
 
 func TestSave(t *testing.T) {
 	// Create a temporary directory for the config file
@@ -69,7 +66,7 @@ func TestSave(t *testing.T) {
 	cfg, err := NewConfig(tempDir)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
-	} 
+	}
 
 	// Modify the configuration
 	cfg.Set("key", "new_value")
@@ -116,7 +113,7 @@ func TestSaveAs(t *testing.T) {
 	cfg.Set("key", "new_value")
 
 	// Save the configuration to a new file
-	newConfigPath := filepath.Join(tempDir, "config_temp_test.json") 
+	newConfigPath := filepath.Join(tempDir, "config_temp_test.json")
 	if err := cfg.SaveAs(newConfigPath, "json"); err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -138,4 +135,3 @@ func TestSaveAs(t *testing.T) {
 		t.Errorf("Expected config path \n%s\nGot:\n%s", newConfigPath, cfg.GetPath())
 	}
 }
-
