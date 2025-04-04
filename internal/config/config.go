@@ -37,12 +37,12 @@ func NewConfig(cpath string) (*Config, error) {
 // Basics fonctionnalities inspired by Viper
 
 // Get returns the value associated with the given key
-func (c *Config) Get(key string) interface{} {
+func (c *Config) Get(key string) any {
 	return c.v.Get(key)
 }
 
 // Set sets or overwrite the value for the given key
-func (c *Config) Set(key string, value interface{}) {
+func (c *Config) Set(key string, value any) {
 	c.v.Set(key, value)
 }
 
