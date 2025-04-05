@@ -11,7 +11,7 @@ import (
 type AWSClient struct {
 	inner  *s3.S3
 	bucket string
-	// TODO: ADD CONFIG HERE?
+	// TODO: Add config/pointer towards a config here?
 }
 
 func (c *AWSClient) ListFiles() ListedFiles[s3.Object] {
@@ -24,6 +24,7 @@ func (c *AWSClient) ListFiles() ListedFiles[s3.Object] {
 	err := c.inner.ListObjectsV2Pages(&input, PagesAccumulator)
 	if err != nil {
 		// TODO: We should handle errors more gracefully.
+		// TODO: Log errors!
 		panic(err)
 	}
 	files, objects := c.populateListOFFiles(pages)
@@ -41,7 +42,7 @@ func (c *AWSClient) populateListOFFiles(pages []s3.ListObjectsV2Output) ([]FileW
 		elem := pages[i]
 		for j := range elem.Contents {
 			awsFile := elem.Contents[j]
-			// TODO:: Use a logger instead of a raw Println
+			// TODO:: Use a logger instead of a raw Println ?
 			fmt.Println(awsFile)
 			file := FileWithMetadata{LastModified: *awsFile.LastModified, Name: *awsFile.Key}
 			listOfFiles = append(listOfFiles, file)
@@ -50,4 +51,12 @@ func (c *AWSClient) populateListOFFiles(pages []s3.ListObjectsV2Output) ([]FileW
 
 	}
 	return listOfFiles, listOfObjects
+}
+
+func (c *AWSClient) DownloadFiles(files []string) (err error) {
+	return fmt.Errorf("TODO")
+}
+
+func (c *AWSClient) UploadFiles(filepaths []string) (err error) {
+	return fmt.Errorf("TODO")
 }

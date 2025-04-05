@@ -17,7 +17,17 @@ type ListedFiles[T fmt.Stringer] struct {
 	Files []FileWithMetadata
 }
 
-// Client Interface over what a client must do and return.
+// Client interface over what a client must do and return.
 type Client[T fmt.Stringer] interface {
 	ListFiles() ListedFiles[fmt.Stringer]
+}
+
+// Client interface for downloading files
+type Downlader interface {
+	DownloadFiles(files []string) (err error)
+}
+
+// Client interface for uploading files
+type Uploader interface {
+	UploadFiles(filepaths []string) (err error)
 }
