@@ -35,7 +35,6 @@ func NewConfig(cpath string) (*Config, error) {
 }
 
 // Basics fonctionnalities inspired by Viper
-
 // Get returns the value associated with the given key
 func (c *Config) Get(key string) any {
 	return c.v.Get(key)
