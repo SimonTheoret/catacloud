@@ -2,8 +2,11 @@ package client
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 // AWSClient Wrapper around the AWS internal client. Its main function is to
@@ -50,4 +53,35 @@ func (c *AWSClient) populateListOFFiles(pages []s3.ListObjectsV2Output) ([]FileW
 
 	}
 	return listOfFiles, listOfObjects
+}
+
+func (c *AWSClient) DeleteRemoteFile(file string) error {
+	_, err := c.inner.DeleteObject(&s3.DeleteObjectInput{Bucket: aws.String(c.bucket), Key: aws.String(file)})
+	if err != nil {
+		return err
+	}
+
+	err = c.inner.WaitUntilObjectNotExists(&s3.HeadObjectInput{
+		Bucket: aws.String(c.bucket),
+		Key:    aws.String(file),
+	})
+	return err
+}
+
+func (c *AWSClient) UploadFile(filepath string, key *string) error {
+	uploader := s3manager.NewUploaderWithClient(c.inner)
+	file, err := os.Open(filepath)
+	if err != nil {
+		return err
+	}
+	uploadInput := s3manager.UploadInput{
+		Bucket: &c.bucket,
+		Key:    key,
+		Body:   file,
+	}
+	_, err = uploader.Upload(&uploadInput)
+	if err != nil {
+		return err
+	}
+	return file.Close()
 }
