@@ -19,5 +19,5 @@ type ListedFiles[T fmt.Stringer] struct {
 
 // Client Interface over what a client must do and return.
 type Client[T fmt.Stringer] interface {
-	ListFiles() ListedFiles[fmt.Stringer]
+	ListFiles() (ListedFiles[fmt.Stringer], error)
 }

@@ -14,7 +14,7 @@ type AWSClient struct {
 	// TODO: ADD CONFIG HERE?
 }
 
-func (c *AWSClient) ListFiles() ListedFiles[s3.Object] {
+func (c *AWSClient) ListFiles() (ListedFiles[s3.Object], error) {
 	input := s3.ListObjectsV2Input{Bucket: &c.bucket}
 	pages := make([]s3.ListObjectsV2Output, 0)
 	PagesAccumulator := func(val *s3.ListObjectsV2Output, _ bool) bool {
@@ -23,13 +23,13 @@ func (c *AWSClient) ListFiles() ListedFiles[s3.Object] {
 	}
 	err := c.inner.ListObjectsV2Pages(&input, PagesAccumulator)
 	if err != nil {
-		// TODO: We should handle errors more gracefully.
-		panic(err)
+		var ret ListedFiles[s3.Object]
+		return ret, err
 	}
 	files, objects := c.populateListOFFiles(pages)
 	listedFiles := ListedFiles[s3.Object]{Inner: objects, Files: files}
 
-	return listedFiles
+	return listedFiles, nil
 }
 
 // populateListOFFiles Iterate over the given pages and gives back a list of
